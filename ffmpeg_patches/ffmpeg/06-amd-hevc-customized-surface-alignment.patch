@@ -1,23 +1,23 @@
 diff --git a/libavcodec/vaapi_encode.c b/libavcodec/vaapi_encode.c
-index 6c3e41fb31..aa53e921b1 100644
+index 6c3e41fb31..0d669e1ae8 100644
 --- a/libavcodec/vaapi_encode.c
 +++ b/libavcodec/vaapi_encode.c
 @@ -2714,6 +2714,19 @@ static av_cold int vaapi_encode_create_recon_frames(AVCodecContext *avctx)
      av_log(avctx, AV_LOG_DEBUG, "Using %s as format of "
             "reconstructed frames.\n", av_get_pix_fmt_name(recon_format));
  
-+    if (constraints->log2_alignment) {
++    //if (constraints->log2_alignment) {
 +        ctx->surface_width = FFALIGN(avctx->width,
-+                              1 << (constraints->log2_alignment & 0xf));
++                              64);
 +        ctx->surface_height = FFALIGN(avctx->height,
-+                              1 << ((constraints->log2_alignment & 0xf0) >> 4));
-+        av_log(avctx, AV_LOG_VERBOSE, "Using customized alignment size "
++                              16);
++        av_log(avctx, AV_LOG_VERBOSE, "Forced using customized alignment size "
 +                "[%dx%d].\n",
-+                (1 << (constraints->log2_alignment & 0xf)),
-+                (1 << ((constraints->log2_alignment & 0xf0) >> 4)));
-+    } else {
-+        av_log(avctx, AV_LOG_VERBOSE, "Not using customized alignment size.");
-+    }
++                ctx->surface_width,
++                ctx->surface_height);
++    //} else {
++    //    av_log(avctx, AV_LOG_VERBOSE, "Not using customized alignment size.");
++    //}
 +
      if (ctx->surface_width  < constraints->min_width  ||
          ctx->surface_height < constraints->min_height ||
